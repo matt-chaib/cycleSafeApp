@@ -12,7 +12,9 @@ function seedMarkers() {
     defaultMarkers.forEach(async m => {
         await db.marker.create({data: {
             latitude: m.lat,
-            longitude: m.lng
+            longitude: m.lng,
+            markerType: 1,
+            description: ""
         }})
     })
   }

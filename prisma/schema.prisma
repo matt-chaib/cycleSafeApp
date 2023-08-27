@@ -18,5 +18,6 @@ model Marker {
 
   longitude Float
   latitude Float
-
+  markerType Int
+  description String
 }
