@@ -11,13 +11,72 @@ datasource db {
 
 }
 
-model Marker {
+model Event {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   longitude Float
   latitude Float
-  markerType Int
+
+  markerTypeKey MarkerType @relation(fields: [markerEventType], references: [markerEventTypeDetail]) // 1: Collision 2: Near-Miss 3: Aggression
+
+  markerEventType String 
+
   description String
+
+  timeOfEvent DateTime @default(now())
+
+  linkToVideo String?
+
+  // user User @relation(fields: [userId], references: [id])
+
+  // userId Int 
+}
+
+model Collision {
+    id Int @id @default(autoincrement())
+    severity CollisionSeverity @relation(fields: [severityType], references: [severityType]) 
+    severityType String
+    estimatedCost Int
+    reportedToPolice Boolean?
+    policeReportId String?
+    actedOnByPolice Boolean?
+}
+
+model CollisionSeverity {
+    id Int @id @default(autoincrement())
+    severityType String @unique // Fatal, Serious, Moderate, Minor
+    collisions Collision[]
+}
+
+model NearMiss {
+    id Int @id @default(autoincrement())
+    missType MissType @relation(fields: [missTypeDescription], references: [missDescription])
+    missTypeDescription String // "Close Pass", "Pull out", "Open Door", "Tailing"
+    reportedToPolice Boolean?
+    policeReportId String?
+    actedOnByPolice Boolean?
+}
+
+model MissType {
+    id Int @id @default(autoincrement())
+    missDescription String @unique
+    nearMisses NearMiss[]
+}
+
+model Aggression {
+    id Int @id @default(autoincrement())
+}
+
+// model User {
+//   id Int @id @default(autoincrement())
+//   email String
+//   markers Event[]
+// }
+
+model MarkerType {
+  id Int @id @default(autoincrement())
+  markerEventTypeDetail String @unique // Collision, Aggression, NearMiss
+  markers Event[]
 }
