@@ -30,7 +30,8 @@
     <nav>
       <ul class="navItems">
         <li class="navItem"><a href="/">Home</a></li>
-        <li class="navItem"><a href="/protected">Protected</a></li>
+        <li class="navItem"><a href="/submit-event">Submit an event</a></li>
+        <li class="navItem"><a href="/data">See the data</a></li>
       </ul>
     </nav>
   </header>
@@ -44,7 +45,6 @@
       "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
       "Noto Color Emoji";
     padding: 0 1rem 1rem 1rem;
-    max-width: 680px;
     margin: 0 auto;
     background: #fff;
     color: #333;
