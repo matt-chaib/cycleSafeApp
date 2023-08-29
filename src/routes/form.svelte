@@ -13,7 +13,7 @@
 
     	let markerTypes = [
 		{ id: 1, text: `Collision` },
-		{ id: 2, text: `Near-miss` },
+		{ id: 2, text: `Near-Miss` },
 		{ id: 3, text: `Aggression` }
 	];
 
@@ -35,44 +35,91 @@
 
 </script>
 <form on:submit|preventDefault={postMarker} >
-    <input
-        name="latitude"
-        autocomplete="off"
-        placeholder="Latitude"
-        value={latVal ?? null}
-    />
-    <input
+	<fieldset class="fieldset">
+	<legend>form</legend>
+
+	<label> 
+		Latitude
+		<input
+			name="latitude"
+			autocomplete="off"
+			placeholder="Latitude"
+			value={latVal ?? null}
+		/>
+	</label>
+
+	<label>
+		Longitude
+		<input
         name="longitude"
         autocomplete="off"
         placeholder="Longitude"
         value={longVal ?? null}
     />
-    <select bind:value={selected} on:change={() => (answer = '')}>
-		{#each markerTypes as selectOption}
-			<option value={selectOption}>
-				{selectOption.text}
-			</option>
-		{/each}
-	</select>
+	</label>
 
-    <textarea placeholder="Description..."></textarea>
+	<label>
+		Type of event
+		<select name="markerEventType" bind:value={selected} on:change={() => (answer = '')}>
+			{#each markerTypes as selectOption}
+				<option value={selectOption.text}>
+					{selectOption.text}
+				</option>
+			{/each}
+		</select>	
+	</label>
+
+	<label>
+		Time of event
+		<input type="datetime-local" name="timeOfEvent" required/>
+	</label>
+
+	<label>
+		Link to video
+		<input name="linkToVideo" placeholder="Link to video"/>
+	</label>
+
+	<label>
+		Description
+		<textarea name="description" placeholder="Description..."></textarea>
+	</label>
+
 <button>Submit</button>
+</fieldset>
 </form>
 
 <style>
 	form {
         width: 20%;
-		height: 200px;
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
+		height: 300px;
+		width: 500px;
         padding: 2rem;
 	}
 
+	.fieldset {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1.5rem;
+		border: 1px solid #ddd;
+		border-radius: 4px;
+		padding: 20px;
+		height: 100%;
+	}
+
+	label {
+		display: flex;
+		flex-direction: column;
+		gap: 0.2rem;
+	}
+
 	input {
-		width: 100%;
+		width: 90%;
 		padding: 0.2rem;
         border-radius:5px;
+	}
+
+	input[type=datetime-local] {
+		padding: 0.7rem;
 	}
 
     select {
@@ -82,12 +129,12 @@
     }
 
     textarea {
-        width:100%;
+        width:90%;
         resize: vertical;
         padding:15px;
         border-radius:15px;
         border:0;
         box-shadow:4px 4px 10px rgba(0,0,0,0.06);
-        height:150px;
+        height:50%;
         }
 </style>

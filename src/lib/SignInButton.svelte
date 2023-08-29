@@ -6,7 +6,7 @@
   {#if provider.callbackUrl}
     <input type="hidden" name="callbackUrl" value={provider.callbackUrl} />
   {/if}
-  <button on:click={() => console.log(provider)}>
+  <button on:click={() => console.log("provider", provider)}>
   </button>
   <button type="submit" class="button">
     <slot>Sign in with... {provider.name}</slot>
