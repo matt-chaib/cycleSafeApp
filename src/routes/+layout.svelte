@@ -31,7 +31,7 @@
       <ul class="navItems">
         <li class="navItem"><a href="/">Home</a></li>
         <li class="navItem"><a href="/submit-event">Submit an event</a></li>
-        <li class="navItem"><a href="/data">See the data</a></li>
+        <li class="navItem"><a href="/data-vis">See the data</a></li>
       </ul>
     </nav>
   </header>
