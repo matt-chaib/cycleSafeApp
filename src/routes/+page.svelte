@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { lat, lng } from '$lib/stores.js';
+	import {places} from '$lib/places.js'
 	import MapComponent from "./map.svelte"
 	import Form from "./form.svelte"
 	export let data;
 
 	$: ({markers} = data)
+	$: place = "Sheffield"
 
 	let latVal;
 	let longVal;
@@ -19,8 +21,13 @@
 
 <div class="centered">
 	<h1>Cycle App Demo</h1>
+	<select bind:value={place}>
+		{#each Object.keys(places) as place}
+		<option value={place}>{place}</option>
+		{/each}
+	</select>
 	<Form></Form>
-	<MapComponent markerData={markers}/>
+	<MapComponent markerData={markers} place={place}/>
 </div>
 
 <style>
