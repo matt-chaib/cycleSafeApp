@@ -11,20 +11,44 @@
 		longVal = value;
 	})
 
-    	let markerTypes = [
+    let markerTypes = [
 		{ id: 1, text: `Collision` },
 		{ id: 2, text: `Near-Miss` },
 		{ id: 3, text: `Aggression` }
 	];
 
-	let selected;
+	let selected = "";
     let answer;
+
+	let severityTypes = [
+		{id: 1, text: `Fatal`},
+		{id: 2, text: `Serious`},
+		{id: 3, text: `Moderate`},
+		{id: 4, text: `Minor`}
+	]
+
+	let selectedSeverity = "";
+
+	let missTypes = [
+		{id: 1, text: `Close Pass`},
+		{id: 2, text: `Pull Out - Parking`},
+		{id: 3, text: `Pull Out - Junction`},
+		{id: 4, text: `Open Door`},
+		{id: 5, text: `Tailing`}
+	]
+
+	let selectedMissType = "";
 
     async function postMarker(event: Event) {
 		const form = event.target as HTMLFormElement
 		const data = new FormData(form)
 
 		await fetch('/api/markers/', {
+			method: 'POST',
+			body: data
+		})
+
+		await fetch('/api/collisions/', {
 			method: 'POST',
 			body: data
 		})
@@ -36,7 +60,7 @@
 </script>
 <form on:submit|preventDefault={postMarker} >
 	<fieldset class="fieldset">
-	<legend>form</legend>
+	<legend>Event Details</legend>
 
 	<label> 
 		Latitude
@@ -44,6 +68,7 @@
 			name="latitude"
 			autocomplete="off"
 			placeholder="Latitude"
+			required
 			value={latVal ?? null}
 		/>
 	</label>
@@ -54,13 +79,14 @@
         name="longitude"
         autocomplete="off"
         placeholder="Longitude"
+		required
         value={longVal ?? null}
     />
 	</label>
 
 	<label>
 		Type of event
-		<select name="markerEventType" bind:value={selected} on:change={() => (answer = '')}>
+		<select name="markerEventType" bind:value={selected} on:change={() => (answer = '')} required >
 			{#each markerTypes as selectOption}
 				<option value={selectOption.text}>
 					{selectOption.text}
@@ -81,19 +107,62 @@
 
 	<label>
 		Description
-		<textarea name="description" placeholder="Description..."></textarea>
+		<textarea name="description" placeholder="Description..." required></textarea>
 	</label>
 
 <button>Submit</button>
+</fieldset>
+
+<fieldset class="fieldset">
+	<legend>{selected} Details</legend>
+	
+	{#if selected=="Collision"}
+	<label>
+		Severity
+		<select name="severityType" bind:value={selectedSeverity} on:change={() => (answer = '')} required>
+			{#each severityTypes as selectOption}
+				<option value={selectOption.text}>
+					{selectOption.text}
+				</option>
+			{/each}
+		</select>	
+	</label>
+
+	<label>
+		Estimated Cost (£)
+		<input
+        name="estimatedCost"
+        autocomplete="off"
+        placeholder="Estimated cost"
+		required
+        value={0}
+    />
+	</label>
+	{:else if selected=="Near-Miss"}
+		<label>
+			Miss Type
+			<select name="missTypeDescription" bind:value={selectedMissType} on:change={() => (answer = '')} required>
+				{#each missTypes as selectOption}
+					<option value={selectOption.text}>
+						{selectOption.text}
+					</option>
+				{/each}
+			</select>	
+		</label>
+	{/if}
+
+	
 </fieldset>
 </form>
 
 <style>
 	form {
-        width: 20%;
-		height: 300px;
-		width: 500px;
+		height: 100%;
+		width: 800px;
         padding: 2rem;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		margin-bottom: 2rem;
 	}
 
 	.fieldset {

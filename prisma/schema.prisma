@@ -8,20 +8,19 @@ generator client {
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
-
 }
 
 model Event {
-  id Int @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   longitude Float
-  latitude Float
+  latitude  Float
 
   markerTypeKey MarkerType @relation(fields: [markerEventType], references: [markerEventTypeDetail]) // 1: Collision 2: Near-Miss 3: Aggression
 
-  markerEventType String 
+  markerEventType String
 
   description String
 
@@ -32,41 +31,50 @@ model Event {
   // user User @relation(fields: [userId], references: [id])
 
   // userId Int 
+  Collision  Collision?
+  NearMiss   NearMiss?
+  Aggression Aggression?
 }
 
 model Collision {
-    id Int @id @default(autoincrement())
-    severity CollisionSeverity @relation(fields: [severityType], references: [severityType]) 
-    severityType String
-    estimatedCost Int
-    reportedToPolice Boolean?
-    policeReportId String?
-    actedOnByPolice Boolean?
+  id               Int               @id @default(autoincrement())
+  severity         CollisionSeverity @relation(fields: [severityType], references: [severityTypeDetail])
+  severityType     String
+  estimatedCost    Int
+  reportedToPolice Boolean?
+  policeReportId   String?
+  actedOnByPolice  Boolean?
+  event            Event             @relation(fields: [eventId], references: [id])
+  eventId          Int               @unique
 }
 
 model CollisionSeverity {
-    id Int @id @default(autoincrement())
-    severityType String @unique // Fatal, Serious, Moderate, Minor
-    collisions Collision[]
+  id           Int         @id
+  severityTypeDetail String      @unique // Fatal, Serious, Moderate, Minor
+  collisions   Collision[]
 }
 
 model NearMiss {
-    id Int @id @default(autoincrement())
-    missType MissType @relation(fields: [missTypeDescription], references: [missDescription])
-    missTypeDescription String // "Close Pass", "Pull out", "Open Door", "Tailing"
-    reportedToPolice Boolean?
-    policeReportId String?
-    actedOnByPolice Boolean?
+  id                  Int      @id @default(autoincrement())
+  missType            MissType @relation(fields: [missTypeDescription], references: [missDescription])
+  missTypeDescription String // "Close Pass", "Pull Out", "Open Door", "Tailing"
+  reportedToPolice    Boolean?
+  policeReportId      String?
+  actedOnByPolice     Boolean?
+  event               Event    @relation(fields: [eventId], references: [id])
+  eventId             Int      @unique
 }
 
 model MissType {
-    id Int @id @default(autoincrement())
-    missDescription String @unique
-    nearMisses NearMiss[]
+  id              Int        @id @default(autoincrement())
+  missDescription String     @unique
+  nearMisses      NearMiss[]
 }
 
 model Aggression {
-    id Int @id @default(autoincrement())
+  id      Int   @id @default(autoincrement())
+  event   Event @relation(fields: [eventId], references: [id])
+  eventId Int   @unique
 }
 
 // model User {
@@ -76,7 +84,7 @@ model Aggression {
 // }
 
 model MarkerType {
-  id Int @id @default(autoincrement())
-  markerEventTypeDetail String @unique // Collision, Aggression, NearMiss
-  markers Event[]
+  id                    Int     @id @default(autoincrement())
+  markerEventTypeDetail String  @unique // Collision, Aggression, NearMiss
+  markers               Event[]
 }
