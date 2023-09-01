@@ -49,7 +49,7 @@ model Collision {
 }
 
 model CollisionSeverity {
-  id           Int         @id
+  id           Int         @id @default(autoincrement())
   severityTypeDetail String      @unique // Fatal, Serious, Moderate, Minor
   collisions   Collision[]
 }

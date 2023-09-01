@@ -48,10 +48,10 @@
 			body: data
 		})
 
-		await fetch('/api/collisions/', {
-			method: 'POST',
-			body: data
-		})
+		// await fetch('/api/collisions/', {
+		// 	method: 'POST',
+		// 	body: data
+		// })
 		setTimeout(() => {
 			invalidateAll()
 		}, 500)

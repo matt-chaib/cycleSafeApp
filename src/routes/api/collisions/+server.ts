@@ -6,7 +6,7 @@ export const POST: RequestHandler = async (event) => {
     const data = await event.request.formData();
 
     const m = await db.collision.create({data: {
-        severityType: data.get('severityType') as unknown as string,
+        severity: { connect:   { severityTypeDetail: data.get('severityType') } },
         estimatedCost: parseInt(data.get('estimatedCost')) as unknown as number,
     }})
 
