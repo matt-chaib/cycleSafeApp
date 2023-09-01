@@ -4,7 +4,6 @@ import { json } from '@sveltejs/kit'
 
 export const GET: RequestHandler = async (event) => {
     const markers  = await db.event.findMany()
-    console.log("Markers in get", markers)
     return json(markers)
 }
 
