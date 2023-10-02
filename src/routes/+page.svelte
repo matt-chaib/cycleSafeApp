@@ -5,6 +5,25 @@
 	import Form from "./form.svelte"
 	export let data;
 
+	import { onMount } from 'svelte'
+	import { supabase } from '../supabaseClient'
+  import type { AuthSession } from '@supabase/supabase-js'
+  import Account from '../lib/Account.svelte'
+  import Auth from '../lib/Auth.svelte'
+
+  let session: AuthSession
+
+onMount(() => {
+  supabase.auth.getSession().then(({ data }) => {
+	session = data.session
+  })
+
+  supabase.auth.onAuthStateChange((_event, _session) => {
+	session = _session
+  })
+})
+
+
 	$: ({markers} = data)
 	$: place = "Sheffield"
 
@@ -21,6 +40,13 @@
 
 <div class="centered">
 	<h1>Cycle App Demo</h1>
+
+	{#if !session}
+	<Auth />
+	{:else}
+	<Account {session} />
+	{/if}
+
 	<select bind:value={place}>
 		{#each Object.keys(places) as place}
 		<option value={place}>{place}</option>
